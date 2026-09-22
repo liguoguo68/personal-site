@@ -14,7 +14,8 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{background:radial-gradient(140% 140% at 50% 50%,transparent 58%,rgba(176,141,87,.10) 100%),radial-gradient(1100px 700px at 80% 15%,rgba(255,255,255,.30),transparent 60%),linear-gradient(155deg,rgba(250,247,242,.66) 0%,rgba(250,247,242,.84) 50%,rgba(238,229,213,.92) 100%),url("assets/bg.jpg") center/cover no-repeat fixed var(--bg);color:var(--text);font-family:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;line-height:1.8;-webkit-font-smoothing:antialiased}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;background:#FAF7F2 url("assets/bg.jpg") center/cover no-repeat;filter:saturate(1.6) contrast(1.07) brightness(1.02)}
+  body{background:radial-gradient(140% 140% at 50% 50%,transparent 58%,rgba(176,141,87,.12) 100%),radial-gradient(1100px 700px at 80% 15%,rgba(255,255,255,.22),transparent 60%),linear-gradient(155deg,rgba(250,247,242,.55) 0%,rgba(250,247,242,.76) 50%,rgba(238,229,213,.90) 100%),linear-gradient(rgba(150,180,220,.10),rgba(150,180,220,.10));color:var(--text);font-family:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;line-height:1.8;-webkit-font-smoothing:antialiased}
   .serif{font-family:"Songti SC","Noto Serif SC","SimSun",serif}
   .wrap{max-width:1000px;margin:0 auto;padding:0 28px}
 
