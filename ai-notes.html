@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AI 笔记 · 做一个能活过 3 小时的网站 | 李红芳</title>
+<style>
+  :root{
+    --bg:#FAF7F2;
+    --bg-2:#F4EFE6;
+    --card:#FFFFFF;
+    --line:#E8E1D4;
+    --line-2:#DDD4C2;
+    --text:#2C2A26;
+    --muted:#8A8578;
+    --accent:#B08D57;
+    --accent-deep:#96753F;
+    --soft:#F0E9DC;
+    --code:#211E19;
+    --shadow:0 24px 50px -26px rgba(120,100,70,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;
+    line-height:1.8;-webkit-font-smoothing:antialiased;
+  }
+  .serif{font-family:"Songti SC","Noto Serif SC","SimSun",serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 28px}
+
+  nav{position:sticky;top:0;z-index:20;background:rgba(250,247,242,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;gap:8px;padding:16px 0}
+  .brand{font-weight:700;letter-spacing:.2em;font-size:15px;color:var(--text);text-decoration:none;margin-right:auto}
+  .brand span{color:var(--accent)}
+  nav a.item{text-decoration:none;color:var(--muted);font-size:14px;padding:7px 16px;border-radius:999px;transition:.25s}
+  nav a.item:hover{color:var(--text);background:var(--soft)}
+  nav a.item.active{color:var(--accent-deep);background:var(--soft);font-weight:600}
+
+  header.page-head{padding:70px 0 30px;text-align:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.35em;color:var(--accent-deep);text-transform:uppercase}
+  .eyebrow::before,.eyebrow::after{content:"";width:34px;height:1px;background:var(--accent)}
+  h1{font-size:clamp(30px,4.4vw,46px);font-weight:700;letter-spacing:.04em;margin:18px 0 10px;line-height:1.3}
+  h1 em{font-style:normal;color:var(--accent-deep)}
+  .sub{color:var(--muted);max-width:640px;margin:0 auto;font-size:15px}
+  .meta{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;margin-top:20px;color:var(--muted);font-size:13px}
+
+  section{padding:52px 0;border-top:1px solid var(--line)}
+  .sec-tag{font-size:12px;letter-spacing:.3em;color:var(--accent-deep);text-transform:uppercase;margin-bottom:8px}
+  h2{font-size:clamp(22px,2.6vw,30px);letter-spacing:.06em;margin-bottom:8px}
+  .lead{color:var(--muted);font-size:15px;margin-bottom:28px;max-width:760px}
+
+  .grid{display:grid;gap:20px}
+  .g-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  @media(max-width:820px){.g-2,.g-3{grid-template-columns:1fr}}
+  .card{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:24px;box-shadow:var(--shadow);
+  }
+  .card h3{font-size:17px;margin-bottom:6px;letter-spacing:.04em}
+  .card p{color:#5C574D;font-size:14px;margin:6px 0}
+  .card .icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;margin-bottom:12px;background:var(--soft)}
+  .pill{display:inline-block;padding:3px 12px;border-radius:999px;font-size:12px;border:1px solid var(--line-2);color:var(--muted);background:#fff}
+  .pill.bad{color:#B4453C;border-color:#E5C4BE;background:#FBF0ED}
+  .pill.warn{color:#9A7427;border-color:#E5D3AE;background:#FBF5E8}
+  .pill.ok{color:#4A7A54;border-color:#C4D8C6;background:#EFF6EF}
+  .pill.info{color:#4A6B8A;border-color:#C4D0DD;background:#EEF3F8}
+
+  .timeline{position:relative;margin:14px 0 0;padding-left:30px}
+  .timeline::before{content:"";position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--accent),transparent)}
+  .tl-item{position:relative;margin-bottom:24px}
+  .tl-item::before{content:"";position:absolute;left:-26px;top:7px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);box-shadow:0 0 0 4px rgba(176,141,87,.15)}
+  .tl-item.bad::before{border-color:#B4453C;box-shadow:0 0 0 4px rgba(180,69,60,.12)}
+  .tl-item.warn::before{border-color:#C99A3A;box-shadow:0 0 0 4px rgba(201,154,58,.12)}
+  .tl-item.ok::before{border-color:#4A7A54;box-shadow:0 0 0 4px rgba(74,122,84,.12)}
+  .tl-title{font-weight:700;font-size:15px}
+  .tl-body{color:var(--muted);font-size:14px;margin-top:4px}
+
+  pre{
+    background:var(--code);color:#EDE6D8;border:1px solid #3A362E;
+    border-radius:14px;padding:16px 18px;overflow:auto;
+    font-family:"JetBrains Mono",ui-monospace,Consolas,monospace;font-size:13px;line-height:1.6;
+  }
+  code.inline{background:var(--soft);color:var(--accent-deep);padding:2px 7px;border-radius:6px;font-family:ui-monospace,Consolas,monospace;font-size:.88em}
+  .c-key{color:#E8B98A}.c-str{color:#B5CEA4}.c-num{color:#E8CE8E}.c-com{color:#8A8578}.c-fn{color:#C9A9E0}.c-ok{color:#9BC7A2}
+
+  .qa{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .qa summary{list-style:none;cursor:pointer;padding:18px 22px;font-weight:600;display:flex;align-items:center;gap:12px;letter-spacing:.02em}
+  .qa summary::-webkit-details-marker{display:none}
+  .qa summary .q{color:var(--accent-deep)}
+  .qa summary .chev{margin-left:auto;transition:.25s;color:var(--muted)}
+  .qa[open] summary .chev{transform:rotate(180deg)}
+  .qa .ans{padding:0 22px 22px;color:#5C574D;font-size:14.5px}
+  .qa .ans ul{margin:8px 0 0;padding-left:20px}
+  .qa .ans li{margin:4px 0}
+
+  .insight{
+    background:linear-gradient(135deg,#FBF6EC,#F4ECDC);
+    border:1px solid #E0CFA9;border-radius:18px;padding:22px 24px;
+  }
+  .insight h4{color:var(--accent-deep);margin-bottom:6px;letter-spacing:.04em}
+  .insight p{color:#6B5F49;font-size:14.5px}
+
+  .flow{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+  .flow svg{width:100%;height:auto;display:block}
+
+  .takeaway{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;box-shadow:var(--shadow)}
+  .takeaway .num{flex:0 0 52px;height:52px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent-deep));color:#fff;font-weight:800;font-size:20px}
+
+  footer{border-top:1px solid var(--line);padding:40px 0 56px;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.06em}
+  .back-home{display:inline-block;margin-top:10px;color:var(--accent-deep);text-decoration:none}
+  .back-home:hover{text-decoration:underline}
+
+  /* NOTE STRUCTURE */
+  .toc-card{display:block;text-decoration:none;color:inherit;position:relative;transition:.3s cubic-bezier(.2,.7,.3,1)}
+  .toc-card:hover{transform:translateY(-4px);box-shadow:0 30px 55px -28px rgba(120,100,70,.45)}
+  .toc-no{font-size:32px;color:var(--accent-deep);font-weight:700;display:block;line-height:1;margin-bottom:10px}
+  .note-head{padding:64px 0 10px;text-align:center;border-top:1px solid var(--line)}
+  .note-head.no-line{border-top:0}
+  .note-badge{
+    display:inline-flex;align-items:center;gap:10px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-deep));color:#fff;
+    border-radius:999px;padding:8px 24px;font-size:13px;letter-spacing:.22em;font-weight:600;
+  }
+  .figure{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+  .figure img{width:100%;height:auto;border-radius:10px;display:block;cursor:zoom-in;transition:.4s}
+  .figure img:hover{transform:scale(1.01)}
+  .figure figcaption{margin-top:12px;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.04em}
+
+  /* LIGHTBOX */
+  .lb{position:fixed;inset:0;z-index:100;background:rgba(20,18,14,.92);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:32px;opacity:0;transition:opacity .3s}
+  .lb.open{display:flex;opacity:1}
+  .lb-inner{position:relative;max-width:min(1100px,96vw);max-height:92vh;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 40px 80px -20px rgba(0,0,0,.6);animation:lbpop .35s cubic-bezier(.2,.7,.3,1) both}
+  .lb img{display:block;max-width:100%;max-height:calc(92vh - 46px);width:auto;height:auto;margin:0 auto;background:#000}
+  .lb .caption{padding:12px 22px;font-size:13px;color:#5C574D;border-top:1px solid var(--line);background:#FAF7F2;text-align:center}
+  .lb-close{position:absolute;right:-52px;top:0;width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:22px;cursor:pointer;display:grid;place-items:center;transition:.2s}
+  .lb-close:hover{background:rgba(255,255,255,.34)}
+  @media(max-width:780px){.lb-close{right:8px;top:-52px}}
+  @keyframes lbpop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+  body.no-scroll{overflow:hidden}
+
+  @media print{nav{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="brand serif" href="index.html">李红芳<span>。</span></a>
+    <a class="item" href="index.html">首页</a>
+    <a class="item active" href="ai-notes.html">AI 笔记</a>
+    <a class="item" href="research.html">科研</a>
+    <a class="item" href="hobbies.html">爱好</a>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">AI Notes · 上线篇</span>
+    <h1 class="serif">做一个能活过 <em>3 小时</em> 的网站，<br>只有那么简单。</h1>
+    <p class="sub">
+      从「链接几小时就死」到「永不掉线」——我用 AI 做个人网站的完整踩坑、复盘与再出发。
+      这不是讲技术细节，而是讲 AI 如何陪我建立「上线思维」。
+    </p>
+    <div class="meta">
+      <span>📅 2026 · 09</span><span>🏷️ 个人网站 · 上线实践</span><span>🧠 链接生命周期 · 域名 · 永久访问</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ═══════════ 目录 ═══════════ -->
+<section style="border-top:0;padding-top:44px">
+  <div class="sec-tag">Contents · 目录</div>
+  <h2 class="serif">这个页面收录了我的 AI 笔记</h2>
+  <p class="lead">两段真实的 AI 协作经历——一篇关于「让网站永久上线」，一篇关于「让 AI 画出一张地图」。</p>
+  <div class="grid g-2">
+    <a class="card toc-card" href="#note-1">
+      <span class="toc-no serif">01</span>
+      <h3>做一个能活过 3 小时的网站</h3>
+      <p>从临时链接 404、preset 域名过期，到绑自己的域名「永久上线」——AI 陪我建立的「上线思维」。</p>
+      <span class="pill ok">上线实践 · 域名 · 永久访问</span>
+    </a>
+    <a class="card toc-card" href="#note-2">
+      <span class="toc-no serif">02</span>
+      <h3>用 Codex 画一张地图</h3>
+      <p>一遍又一遍修改、从无到有，让 AI 在联网地图上画出以成都、重庆、西安为核心的西部通道图。</p>
+      <span class="pill info">AI 绘图 · Codex · 联网地图</span>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════ 笔记 01 ═══════════ -->
+<article id="note-1">
+
+<section class="note-head no-line">
+  <span class="note-badge serif">笔记 01</span>
+  <h2 class="serif" style="margin-top:16px">做一个能活过 3 小时的网站</h2>
+  <p class="lead" style="margin-bottom:0">从「链接几小时就死」到「永不掉线」——只有那么简单。</p>
+</section>
+
+<!-- TLDR -->
+<section>
+  <div class="sec-tag">TL;DR · 一目了然</div>
+  <h2 class="serif">三句话先看清整件事</h2>
+  <div class="grid g-3" style="margin-top:22px">
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#96753F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <h3>链接也会「过期」</h3>
+      <p>代码写完 ≠ 网站活着。临时沙箱 / 边缘预设域名都带「半衰期」，到点链接就死。</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#96753F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+      <h3>域名 = 你的「不动产」</h3>
+      <p>把网站绑到自己的域名上，才算真的上线。从那一刻起，链接才属于你。</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#96753F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <h3>AI 陪我走完全程</h3>
+      <p>AI 不只写页面，更陪我选型、查报错、绑域名、做验证——它是我的「上线陪练」。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 症状 -->
+<section>
+  <div class="sec-tag">01 · 症状</div>
+  <h2 class="serif">「网站只能活 3 小时」</h2>
+  <p class="lead">项目全做完了，部署到临时链接上一切正常。但第二天醒来——404 / 链接失效。</p>
+  <div class="timeline">
+    <div class="tl-item bad">
+      <div class="tl-title">第 1 次踩坑 · 沙箱被回收</div>
+      <div class="tl-body">临时沙箱部署，前几个小时正常，<strong>沙箱到期后进程被回收</strong>，链接立即 404。代码还在，<em>跑不起来</em>。</div>
+    </div>
+    <div class="tl-item warn">
+      <div class="tl-title">第 2 次踩坑 · preset 域名也「有期限」</div>
+      <div class="tl-body">迁到边缘平台后有了默认域名，但访问链接里带 <code class="inline">?eo_token=...&amp;eo_time=...</code>——几小时后 <code class="inline">eo_time</code> 失效，请求被 <code class="inline">401</code> 拦下。</div>
+    </div>
+    <div class="tl-item ok">
+      <div class="tl-title">第 3 次破局 · 绑自己的域名</div>
+      <div class="tl-body">DNS 解析、归属验证、绑定到边缘项目——那一刻起，链接的「生死」第一次<strong>真正由我做主</strong>。</div>
+    </div>
+  </div>
+  <div class="insight" style="margin-top:26px">
+    <h4>💡 一句话总结这段弯路</h4>
+    <p>「<strong>部署成功 ≠ 网站活着</strong>」。判定「活着」只有一条标准：<strong>打开链接，看到自己的内容</strong>。其余一切——端口、内网 IP、临时域名——都只是租来的房子。</p>
+  </div>
+</section>
+
+<!-- 洞察 -->
+<section>
+  <div class="sec-tag">02 · 关键洞察</div>
+  <h2 class="serif">为什么链接会「过期」</h2>
+  <p class="lead">不同部署方式对应不同的「链接生命周期」。想清楚这一层，决定你要不要走到「域名」那一步。</p>
+  <div class="grid g-3">
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B4453C" stroke-width="1.8" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></div>
+      <h3>临时沙箱</h3>
+      <p>「<strong>租来的服务器</strong>」。平台按小时回收实例，链接随实例消失。</p>
+      <span class="pill bad">半衰期：几小时</span>
+    </div>
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9A7427" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg></div>
+      <h3>边缘预设域名</h3>
+      <p>「<strong>签了短约的公寓</strong>」。实例在，但访问需要临时令牌，令牌过期就要重新签发。</p>
+      <span class="pill warn">半衰期：数小时</span>
+    </div>
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A7A54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 12 3l9 9-9 9-9-9z"/></svg></div>
+      <h3>自定义域名</h3>
+      <p>「<strong>自己买下的房子</strong>」。DNS 指向你、证书由你、访问永远不需要令牌。</p>
+      <span class="pill ok">半衰期：永久</span>
+    </div>
+  </div>
+  <div class="flow" style="margin-top:20px">
+    <svg viewBox="0 0 1080 220" aria-label="链接生命周期对比图">
+      <defs>
+        <linearGradient id="road0" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B4453C"/><stop offset="1" stop-color="#96753F"/></linearGradient>
+        <linearGradient id="road1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#C99A3A"/><stop offset="1" stop-color="#96753F"/></linearGradient>
+        <linearGradient id="road2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4A7A54"/><stop offset="1" stop-color="#96753F"/></linearGradient>
+      </defs>
+      <g transform="translate(40,40)">
+        <text x="0" y="14" fill="#8A8578" font-family="system-ui" font-size="13">临时沙箱</text>
+        <rect x="120" y="0" width="60" height="20" rx="6" fill="#B4453C"/>
+        <rect x="190" y="0" width="60" height="20" rx="6" fill="#B4453C" opacity=".6"/>
+        <rect x="260" y="0" width="60" height="20" rx="6" fill="#B4453C" opacity=".25"/>
+        <line x1="330" y1="10" x2="940" y2="10" stroke="#DDD4C2" stroke-dasharray="3 5"/>
+        <text x="950" y="14" fill="#8A8578" font-size="12">↘ 几小时</text>
+      </g>
+      <g transform="translate(40,100)">
+        <text x="0" y="14" fill="#8A8578" font-family="system-ui" font-size="13">预设域名</text>
+        <rect x="120" y="0" width="60" height="20" rx="6" fill="#C99A3A"/>
+        <rect x="190" y="0" width="60" height="20" rx="6" fill="#C99A3A" opacity=".65"/>
+        <rect x="260" y="0" width="60" height="20" rx="6" fill="#C99A3A" opacity=".4"/>
+        <rect x="330" y="0" width="60" height="20" rx="6" fill="#C99A3A" opacity=".15"/>
+        <line x1="400" y1="10" x2="940" y2="10" stroke="#DDD4C2" stroke-dasharray="3 5"/>
+        <text x="950" y="14" fill="#8A8578" font-size="12">↘ 数小时</text>
+      </g>
+      <g transform="translate(40,160)">
+        <text x="0" y="14" fill="#8A8578" font-family="system-ui" font-size="13">自定义域名</text>
+        <rect x="120" y="0" width="800" height="20" rx="6" fill="url(#road2)"/>
+        <text x="950" y="14" fill="#8A8578" font-size="12">→ 永久</text>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- 操作 -->
+<section>
+  <div class="sec-tag">03 · 操作全流程</div>
+  <h2 class="serif">从「决定弄域名」到「永久上线」的每一步</h2>
+  <p class="lead">下面是我和 AI 一起走完的完整操作链。隐藏了账号、token、真实域名——只留下决策骨架。</p>
+  <div class="grid g-2">
+    <div class="card">
+      <h3>① 决策：到底要不要域名？</h3>
+      <p>临时链接也能「上线了」。但只要想让链接<strong>分享给别人、长期可被搜到、跨设备稳定</strong>，就一定要走自定义域名。<em>域名不是技术问题，是「产品定位」问题</em>。</p>
+      <span class="pill info">心态：从「能跑」→「能活」</span>
+    </div>
+    <div class="card">
+      <h3>② 选型：把网站放哪里？</h3>
+      <p>项目是纯静态 SPA——<code class="inline">index.html</code> + 资源 + 预渲染路由。没有后端函数，所以<strong>边缘静态托管</strong>比「云函数」更划算。</p>
+      <span class="pill info">只部署 dist/，不部署 node_modules/</span>
+    </div>
+    <div class="card">
+      <h3>③ 开通：边缘平台</h3>
+      <p>第一次部署报 <code class="inline">Zone is not active</code>——是后台<strong>激活传播延迟</strong>。等几分钟，或在控制台手动新建一个空项目触发初始化，就能继续。</p>
+      <span class="pill warn">坑：第一次往往失败，再试一次就好</span>
+    </div>
+    <div class="card">
+      <h3>④ 首次部署：把 dist/ 推上去</h3>
+      <p>平台返回的 <code class="inline">previewUrl</code> 里带着 <code class="inline">?eo_token=...&amp;eo_time=...</code>。<strong>注意：这里的 token 就是会过期的。</strong></p>
+      <pre><span class="c-com"># 等价命令（不暴露真实信息）</span>
+<span class="c-fn">deploy</span>(<span class="c-key">builtFolderPath</span>: <span class="c-str">"dist"</span>,
+       <span class="c-key">projectType</span>: <span class="c-str">"static"</span>)
+<span class="c-com"># → { previewUrl, status: "Success" }</span></pre>
+    </div>
+    <div class="card">
+      <h3>⑤ 验证：preset 域名到底活不活？</h3>
+      <p>用 <code class="inline">curl -I</code> 看响应头：</p>
+      <pre><span class="c-key">HTTP/1.1</span> <span class="c-ok">200</span> OK
+<span class="c-key">Server:</span> edgeone makers
+<span class="c-key">Cache-Control:</span> public,max-age=<span class="c-num">0</span>,must-revalidate</pre>
+      <p>几小时后再试，如果出现：</p>
+      <pre><span class="c-key">HTTP/1.1</span> <span class="c-fn">401</span> Authorization Required
+<span class="c-key">X-EOP-MSG:</span> eo_time missing</pre>
+      <p>就说明 preset 链接的「租约」到期了。</p>
+    </div>
+    <div class="card">
+      <h3>⑥ 买域名 + DNS 解析</h3>
+      <p>在域名服务商买好域名 → DNS 控制台把根域 / 子域<strong>CNAME 解析</strong>到平台给的接入地址。生效通常几分钟到几小时。</p>
+      <span class="pill info">DNS 不熟的话：先 CNAME，再用 nslookup 验证</span>
+    </div>
+    <div class="card">
+      <h3>⑦ 平台绑定自定义域名</h3>
+      <p>在边缘项目的「自定义域名」入口填入域名，平台做<strong>归属验证</strong>。验证通过后自动签发证书。</p>
+      <span class="pill ok">证书签发后 → https 直接可用</span>
+    </div>
+    <div class="card">
+      <h3>⑧ 验证：用真实域名再 curl 一次</h3>
+      <p>状态码 200、不再需要 <code class="inline">eo_token</code>——这才是<strong>真正「上线」</strong>的标志。</p>
+      <pre><span class="c-key">HTTP/1.1</span> <span class="c-ok">200</span> OK
+<span class="c-key">content-type:</span> text/html
+<span class="c-key">cache-control:</span> public,max-age=<span class="c-num">0</span>,must-revalidate
+<span class="c-key">server:</span> edgeone makers</pre>
+    </div>
+  </div>
+  <div class="insight" style="margin-top:24px">
+    <h4>🧠 心得：域名这一步，本质是「重新定义链接的拥有者」</h4>
+    <p>临时链接时代，链接属于平台。绑了域名之后，链接属于我。<strong>这一步把「访问」从「授权」变成了「公共设施」。</strong></p>
+  </div>
+</section>
+
+<!-- 截图问答 -->
+<section>
+  <div class="sec-tag">06 · 我问 AI 的那些图像问题</div>
+  <h2 class="serif">截图一发，AI 就把报错「翻译」成了下一步</h2>
+  <p class="lead">我不是把所有报错都看懂才动手的——我是<strong>截图扔给 AI</strong>。它最值钱的本事，是<em>把我看不懂的图，重新讲一遍</em>。</p>
+  <div class="grid g-2">
+
+    <div class="card">
+      <h3>📸 案例 1 · 控制台报错截图</h3>
+      <svg viewBox="0 0 480 210" style="width:100%;height:auto;border-radius:12px;margin:8px 0 10px;border:1px solid #3A362E">
+        <rect width="480" height="210" fill="#211E19"/>
+        <rect width="480" height="20" fill="#2C2822"/><circle cx="12" cy="10" r="3" fill="#B4453C"/><circle cx="26" cy="10" r="3" fill="#C99A3A"/><circle cx="40" cy="10" r="3" fill="#4A7A54"/>
+        <text x="14" y="42" fill="#8A8578" font-family="Consolas,monospace" font-size="11">$ node deploy.mjs</text>
+        <text x="14" y="70" fill="#E07B6E" font-family="Consolas,monospace" font-size="11">AuthError: Token error.</text>
+        <text x="14" y="88" fill="#8A8578" font-family="Consolas,monospace" font-size="11">  code: '105', httpStatus: 200</text>
+        <text x="14" y="124" fill="#E8B98A" font-family="Consolas,monospace" font-size="11"># 附言：</text>
+        <text x="14" y="144" fill="#EDE6D8" font-family="system-ui" font-size="12">「AI 帮我看看这是啥意思？我 token 都填了呀？」</text>
+      </svg>
+      <p><strong>AI 翻译：</strong>「这不是你代码错了，是<em>平台 token 过期或没填对位置</em>。重新生成 API Key，注意区分 Global / China 区域。」</p>
+      <p style="color:var(--accent-deep);font-size:13px">→ 报错在告诉我「哪一层」出错，不是「哪一行」。</p>
+    </div>
+
+    <div class="card">
+      <h3>📸 案例 2 · DNS 配置页截图</h3>
+      <svg viewBox="0 0 480 210" style="width:100%;height:auto;border-radius:12px;margin:8px 0 10px;border:1px solid var(--line-2)">
+        <rect width="480" height="210" fill="#FFFFFF"/>
+        <text x="14" y="24" fill="#2C2A26" font-family="system-ui" font-size="13" font-weight="700">域名解析 · 添加记录</text>
+        <line x1="14" y1="36" x2="466" y2="36" stroke="#E8E1D4"/>
+        <text x="14" y="58" fill="#8A8578" font-size="11">记录类型</text><text x="14" y="76" fill="#2C2A26" font-size="12">CNAME</text>
+        <text x="160" y="58" fill="#8A8578" font-size="11">主机记录</text><text x="160" y="76" fill="#2C2A26" font-size="12">@</text>
+        <text x="300" y="58" fill="#8A8578" font-size="11">记录值</text><text x="300" y="76" fill="#2C2A26" font-size="12">xxx.edgeone.dev</text>
+        <line x1="14" y1="96" x2="466" y2="96" stroke="#F4EFE6"/>
+        <text x="14" y="126" fill="#2C2A26" font-size="12">「主机记录填 @ 还是 www？」</text>
+        <text x="14" y="146" fill="#2C2A26" font-size="12">「记录值是域名还是 IP？」</text>
+        <text x="14" y="182" fill="#96753F" font-size="11">[ 附了上面这张配置页截图 ]</text>
+      </svg>
+      <p><strong>AI 翻译：</strong>「<code class="inline">@</code> 是裸域，<code class="inline">www</code> 是子域，两条都要加。记录值填平台的<em>接入域名</em>，不是 IP。」</p>
+      <p style="color:var(--accent-deep);font-size:13px">→ IP 给机器用，CNAME 给域名用。</p>
+    </div>
+
+    <div class="card">
+      <h3>📸 案例 3 · 自定义域名页截图</h3>
+      <svg viewBox="0 0 480 210" style="width:100%;height:auto;border-radius:12px;margin:8px 0 10px;border:1px solid var(--line-2)">
+        <rect width="480" height="210" fill="#FFFFFF"/>
+        <rect x="14" y="14" width="452" height="56" rx="10" fill="#FBF6EC" stroke="#E0CFA9"/>
+        <text x="30" y="38" fill="#96753F" font-size="13" font-weight="700">📌 自定义域名</text>
+        <text x="30" y="56" fill="#8A8578" font-size="11">绑定你自己的网址，让用户记住它</text>
+        <rect x="14" y="86" width="452" height="46" rx="8" fill="#FAF7F2" stroke="#E8E1D4"/>
+        <text x="30" y="106" fill="#8A8578" font-size="11">输入域名</text>
+        <rect x="30" y="112" width="200" height="13" fill="#F4EFE6" stroke="#E8E1D4"/>
+        <text x="36" y="122" fill="#2C2A26" font-family="Consolas,monospace" font-size="10">your-domain.top</text>
+        <rect x="384" y="110" width="72" height="18" rx="6" fill="#B08D57"/>
+        <text x="420" y="123" text-anchor="middle" fill="#fff" font-size="11">添加</text>
+        <text x="14" y="162" fill="#2C2A26" font-size="12">「我点了添加，但它一直转圈。」</text>
+        <text x="14" y="182" fill="#2C2A26" font-size="12">「DNS 我设了啊？」</text>
+      </svg>
+      <p><strong>AI 翻译：</strong>「转圈」是在做<em>归属校验</em>。<strong>DNS 全球生效可能要 10 分钟到 24 小时</strong>，别急。失败一般是记录值打错、用了 A 记录、或区域选错。</p>
+      <p style="color:var(--accent-deep);font-size:13px">→ 「转圈」不是卡死，是在问全世界「这域名是不是真的属于我」。</p>
+    </div>
+
+    <div class="card">
+      <h3>📸 案例 4 · 证书签发中截图</h3>
+      <svg viewBox="0 0 480 210" style="width:100%;height:auto;border-radius:12px;margin:8px 0 10px;border:1px solid var(--line-2)">
+        <rect width="480" height="210" fill="#FFFFFF"/>
+        <text x="14" y="24" fill="#2C2A26" font-size="13" font-weight="700">SSL/TLS 证书</text>
+        <line x1="14" y1="36" x2="466" y2="36" stroke="#E8E1D4"/>
+        <circle cx="36" cy="64" r="13" fill="#FBF5E8" stroke="#C99A3A"/>
+        <text x="36" y="68" text-anchor="middle" fill="#9A7427" font-size="13">⏳</text>
+        <text x="62" y="68" fill="#2C2A26" font-size="13">your-domain.top</text>
+        <rect x="286" y="56" width="96" height="17" rx="9" fill="#FBF5E8" stroke="#E5D3AE"/>
+        <text x="334" y="68" text-anchor="middle" fill="#9A7427" font-size="10">签发中</text>
+        <rect x="14" y="100" width="452" height="30" rx="8" fill="#FAF7F2"/>
+        <rect x="22" y="108" width="220" height="5" rx="3" fill="#E0CFA9"/>
+        <rect x="22" y="119" width="150" height="5" rx="3" fill="#E0CFA9"/>
+        <text x="14" y="162" fill="#2C2A26" font-size="12">「它一直『签发中』，是不是卡了？要多久？」</text>
+      </svg>
+      <p><strong>AI 翻译：</strong>签发通常<strong>5–15 分钟</strong>。超过 30 分钟：① DNS 未解析到边缘节点 ② 域名拼写不一致 ③ 网络访问不到验证服务器。等的时候用 <code class="inline">nslookup</code> 自己查。</p>
+      <p style="color:var(--accent-deep);font-size:13px">→ 等证书时不是干等，是开终端验证 DNS。</p>
+    </div>
+
+    <div class="card">
+      <h3>📸 案例 5 · 浏览器 401 截图</h3>
+      <svg viewBox="0 0 480 210" style="width:100%;height:auto;border-radius:12px;margin:8px 0 10px;border:1px solid var(--line-2)">
+        <rect width="480" height="210" fill="#FFF"/>
+        <rect width="480" height="20" fill="#F4EFE6"/><circle cx="12" cy="10" r="3" fill="#B4453C"/><circle cx="26" cy="10" r="3" fill="#C99A3A"/><circle cx="40" cy="10" r="3" fill="#4A7A54"/>
+        <text x="240" y="40" text-anchor="middle" fill="#8A8578" font-size="10" font-family="Consolas,monospace">https://xxx.edgeone.dev/?eo_token=...</text>
+        <text x="240" y="102" text-anchor="middle" fill="#B4453C" font-size="54" font-weight="900" font-family="system-ui">401</text>
+        <text x="240" y="128" text-anchor="middle" fill="#2C2A26" font-size="13" font-weight="700" font-family="system-ui">Authorization Required</text>
+        <text x="240" y="147" text-anchor="middle" fill="#8A8578" font-size="11" font-family="Consolas,monospace">eo_time missing</text>
+        <text x="240" y="184" text-anchor="middle" fill="#2C2A26" font-size="12" font-family="system-ui">「我朋友电脑也打不开，是不是网站挂了？」</text>
+      </svg>
+      <p><strong>AI 翻译：</strong>「网站没挂，<em>链接挂了</em>。你朋友复制链接时没带上 token。长期解法：绑自定义域名，访问不带任何参数。」</p>
+      <p style="color:var(--accent-deep);font-size:13px">→ 链接后面有 <code class="inline">?...</code> 是临时链接的「标记」。</p>
+    </div>
+
+    <div class="card" style="background:#FBF6EC;border-color:#E0CFA9">
+      <h3>🤖 我截图问 AI 的小习惯</h3>
+      <p>1) <strong>截图 + 一句话</strong>，比「帮我看看」高效一万倍。<br>
+         2) <strong>红框圈出关键位置</strong>，AI 不会跑偏。<br>
+         3) <strong>附上已做过的操作</strong>——「已重启 N 次」「已填了 X」，AI 会跳过重复建议。<br>
+         4) <strong>看不懂英文报错</strong>直接截图——AI 的中文翻译 + 思路，比搜索结果第一条有用。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 例子 -->
+<section>
+  <div class="sec-tag">07 · 几个具体例子</div>
+  <h2 class="serif">真实的故事线：从 404 到「永久在线」</h2>
+  <p class="lead">比起抽象步骤，我更愿意把我自己走过的弯路写下来。希望这几个小故事让你少走两步。</p>
+  <div class="grid g-2">
+    <div class="card">
+      <span class="pill bad">第 1 天 · 凌晨 3 点</span>
+      <h3 style="margin-top:10px">「我以为是代码 bug」</h3>
+      <p>第二天打开网站 404，第一反应是「我哪段代码改坏了」——翻 git log、查路由组件两小时，<strong>最后发现是沙箱到期</strong>。</p>
+      <p style="color:var(--accent-deep);font-size:13.5px">教训：先看<em>服务器在不在</em>，再看代码对不对。</p>
+    </div>
+    <div class="card">
+      <span class="pill warn">第 2 天 · 上午 10 点</span>
+      <h3 style="margin-top:10px">「我以为 preset 域名就是永久」</h3>
+      <p>朋友发消息「打不开」。一看 401——链接里有 <code class="inline">eo_token</code>，他复制时<strong>把 query 丢了</strong>。</p>
+      <p style="color:var(--accent-deep);font-size:13.5px">教训：链接带 <code class="inline">?token=...</code> = 临时工牌。</p>
+    </div>
+    <div class="card">
+      <span class="pill info">第 3 天 · 下午 2 点</span>
+      <h3 style="margin-top:10px">「我以为 DNS 改完就完事」</h3>
+      <p>填完 CNAME 就关掉页面，结果绑定失败。原因是 <strong>DNS 全球生效不是秒到</strong>，得用 <code class="inline">nslookup</code> 看到对端才算生效。</p>
+      <p style="color:var(--accent-deep);font-size:13.5px">教训：DNS 改完不是「发了」，是「全世界都知道了」。</p>
+    </div>
+    <div class="card">
+      <span class="pill ok">第 4 天 · 晚上 8 点</span>
+      <h3 style="margin-top:10px">「我以为 AI 能替我点完所有按钮」</h3>
+      <p>我问 AI「能替我付个款吗？」它说：「付款这事……得你自己上。」<strong>涉及钱、验证码、扫码登录——必须是我本人</strong>。</p>
+      <p style="color:var(--accent-deep);font-size:13.5px">教训：AI 给你方向盘和地图，<strong>油门是你自己踩的</strong>。</p>
+    </div>
+    <div class="card">
+      <span class="pill info">第 5 天 · 早上 9 点</span>
+      <h3 style="margin-top:10px">「我以为 14 块是个玩笑」</h3>
+      <p>查域名报价，<strong>.top 首年 14 块</strong>，续费也才几十。原来「永久地址」的门槛是一个奶茶钱。</p>
+      <p style="color:var(--accent-deep);font-size:13.5px">教训：域名是<strong>每年一顿饭的预算</strong>。</p>
+    </div>
+    <div class="card">
+      <span class="pill ok">第 6 天 · 上午 11 点</span>
+      <h3 style="margin-top:10px">「我以为改一行代码别人就改不了」</h3>
+      <p>能改 dist/ 的只有拥有平台 token 的人；别人拿到链接只能<em>在自己浏览器里点</em>，改的是他自己的 localStorage。</p>
+      <p style="color:var(--accent-deep);font-size:13.5px">教训：安全分三层（代码层 / 数据层 / 管理员层）。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 重要问题 -->
+<section>
+  <div class="sec-tag">04 · 重要问题</div>
+  <h2 class="serif">一路上我问 AI 的那些关键问题</h2>
+  <p class="lead">这些是当时真实卡住我的问题。AI 的回答决定了我是继续踩坑，还是换一条路。</p>
+
+  <details class="qa" open>
+    <summary><span class="q">Q1.</span> 临时沙箱为什么「几小时就失效」？
+      <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <div class="ans">
+      <p>沙箱是<strong>按时间租借</strong>的临时计算资源。平台会在空闲一段时间后回收实例，链接不再指向任何进程，浏览器自然打不开。</p>
+      <p><strong>结论：</strong>沙箱适合「演示一次」，不适合「长期展示」。</p>
+    </div>
+  </details>
+
+  <details class="qa">
+    <summary><span class="q">Q2.</span> preset 域名不是「永久的」吗？
+      <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <div class="ans">
+      <p>域名本身长期存在，但<strong>访问它需要临时令牌</strong>（<code class="inline">eo_token</code> + <code class="inline">eo_time</code>）。令牌过期，请求就被 <code class="inline">401</code> 拦下。</p>
+      <p>这是平台为<strong>防滥用 / 防盗刷</strong>做的访问控制，并非 bug。</p>
+    </div>
+  </details>
+
+  <details class="qa">
+    <summary><span class="q">Q3.</span> 这个网页，是不是只有我能改？
+      <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <div class="ans">
+      <p>好问题。这个网站是<strong>纯静态前端 + 浏览器本地存储</strong>。</p>
+      <ul>
+        <li><strong>代码层</strong>：只有部署者（拥有平台 token 的人）能改 dist/ 并重新发布。</li>
+        <li><strong>数据层</strong>：商品 / 收藏 / 草稿存在用户<em>本地浏览器</em>里。换设备、清缓存 = 数据「消失」。</li>
+        <li><strong>管理员</strong>：登录后可以操作前端界面，但不会写回服务器——除非接上后端。</li>
+      </ul>
+      <p>所以：<strong>「只有你能改代码」</strong> + <strong>「用户只能改自己浏览器里的本地数据」</strong>。想做「多用户共享数据」，下一步要接数据库。</p>
+    </div>
+  </details>
+
+  <details class="qa">
+    <summary><span class="q">Q4.</span> 域名要怎么「绑」到边缘平台？
+      <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <div class="ans">
+      <p><strong>① DNS 侧</strong>：把域名的 CNAME（或 A 记录）解析到平台给的接入地址。</p>
+      <p><strong>② 平台侧</strong>：自定义域名 → 添加域名 → 等待平台做<strong>归属校验</strong>。校验通过，平台自动签发证书。之后任何人打开它都不再需要 token。</p>
+    </div>
+  </details>
+
+  <details class="qa">
+    <summary><span class="q">Q5.</span> 一定要弄海外节点吗？
+      <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <div class="ans">
+      <p>看目标用户。访问者在境外——选海外节点，首屏更快；都在境内——国内节点更稳定，备案也更省心。</p>
+      <p>我的目标用户是<strong>本地校园用户</strong>，所以最终选了<strong>国内节点 + 自定义域名</strong>。</p>
+    </div>
+  </details>
+
+  <details class="qa">
+    <summary><span class="q">Q6.</span> 静态网站和「接了后端的网站」差在哪？
+      <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <div class="ans">
+      <p><strong>静态网站</strong>：服务器只发文件，不存数据。A 用户上传的东西，B 用户看不到。</p>
+      <p><strong>接了后端</strong>：服务器有数据库，A 发的内容真的写进去，所有人看到同一份「实时」内容。</p>
+      <p><em>想让别人留下的痕迹被别人看见——接后端；只想「展示」——静态就够。</em></p>
+    </div>
+  </details>
+
+  <details class="qa">
+    <summary><span class="q">Q7.</span> 域名是要买的吗？每年都要续费？
+      <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <div class="ans">
+      <p>是的。域名是「租用」，按年计费，到期不续费就会释放。</p>
+      <p>但域名的死是<em>可控的</em>死：你提前知道到期日。临时链接的死是<em>不可控的</em>：睡一觉起来，可能就死了。</p>
+    </div>
+  </details>
+</section>
+
+<!-- AI 心得 -->
+<section>
+  <div class="sec-tag">05 · AI 模块心得</div>
+  <h2 class="serif">AI 陪我走完这一程，它改变了我什么</h2>
+  <div class="grid g-3" style="margin-top:20px">
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#96753F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+      <h3>它给我「问对问题的勇气」</h3>
+      <p>AI 不嘲笑我的幼稚，反而先确认我的目标——<em>「只要给自己看，临时链接就够；想让别人看、想长期在，就要域名。」</em></p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#96753F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+      <h3>它把报错翻译成「下一步」</h3>
+      <p>第一次部署失败时，AI <em>翻译错误</em>：「这叫 Zone is not active，是后台激活延迟，等几分钟再试。」——一句话，我能照着做。</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#96753F" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v20M2 12h20"/></svg></div>
+      <h3>它陪我做「上线后的复盘」</h3>
+      <p>当我问「我的网站是不是只有我能改」时，AI 把它拆成<em>代码层 / 数据层 / 管理员层</em>三层，让我知道「安全」和「功能」是两件不同的事。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 终极心得 -->
+<section>
+  <div class="sec-tag">08 · 终极心得</div>
+  <h2 class="serif">最后我想留给「未来的自己」的四句话</h2>
+  <div class="grid g-2" style="margin-top:20px">
+
+    <div class="takeaway" style="flex-direction:column;align-items:stretch">
+      <div style="display:flex;align-items:center;gap:14px"><div class="num">1</div><h3>看不懂，就全部问 AI</h3></div>
+      <p style="margin:12px 0 0;color:#5C574D;font-size:14.5px">报错截图丢给它、术语问它、概念不懂问它——AI 大概率<strong>比你的老师更会回答</strong>。不是 AI 比老师「厉害」，而是它<em>对你这一道题的回答时间和耐心没有上限</em>。</p>
+    </div>
+
+    <div class="takeaway" style="flex-direction:column;align-items:stretch">
+      <div style="display:flex;align-items:center;gap:14px"><div class="num">2</div><h3>网络安全那条红线，AI 跨不过去</h3></div>
+      <p style="margin:12px 0 0;color:#5C574D;font-size:14.5px">涉及<strong>账号登录、付款、扫码、验证码、复制 token 指令</strong>——必须自己上。在腾讯云 / 阿里云上：复制命令 AI 给，<strong>粘贴命令你做；付款确认你点</strong>。</p>
+    </div>
+
+    <div class="takeaway" style="flex-direction:column;align-items:stretch">
+      <div style="display:flex;align-items:center;gap:14px"><div class="num">3</div><h3>普通域名，远比你想象的划算</h3></div>
+      <p style="margin:12px 0 0;color:#5C574D;font-size:14.5px">我买的 <code class="inline">.top</code> 首年 <strong style="color:var(--accent-deep)">14 块</strong>，续费也才几十。域名不是奢侈品，是<em>一个奶茶钱换一年的「门牌号」</em>。</p>
+    </div>
+
+    <div class="takeaway" style="flex-direction:column;align-items:stretch">
+      <div style="display:flex;align-items:center;gap:14px"><div class="num">4</div><h3>感谢刘老：领进门的人，不给你设限</h3></div>
+      <p style="margin:12px 0 0;color:#5C574D;font-size:14.5px">感谢<strong>成都大学商学院的刘老</strong>。他有一种<em>神奇的魔力</em>——把你领进门，但不把每一步都讲死。不设限，也不给答案，让我们在<strong>探索的过程里</strong>，自己把该踩的坑、该懂的概念、该会的工具，一个一个摸出来。</p>
+      <p style="margin:8px 0 0;color:var(--accent-deep);font-size:13.5px;font-style:italic">——刘老，谢谢您没给我设限。</p>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:44px;padding:34px;border-radius:22px;background:linear-gradient(135deg,#FBF6EC,#F4ECDC);border:1px solid #E0CFA9">
+    <div class="serif" style="font-size:26px;font-weight:700;letter-spacing:.03em">所以你看——</div>
+    <div class="serif" style="font-size:clamp(22px,3vw,30px);font-weight:700;margin-top:8px;color:var(--accent-deep)">做一个能活过 3 小时的网站，只有那么简单。</div>
+    <div style="margin-top:10px;color:var(--muted);font-size:14px">——以及，「比想象中简单」的背后，是很多<em>真实地踩过坑</em>的人。</div>
+  </div>
+</section>
+
+</div>
+
+</article>
+
+<!-- ═══════════ 笔记 02 · 用 Codex 画地图 ═══════════ -->
+<article id="note-2">
+
+<section class="note-head">
+  <span class="note-badge serif">笔记 02</span>
+  <h2 class="serif" style="margin-top:16px">用 Codex 画一张地图：一遍又一遍，从无到有</h2>
+  <p class="lead" style="margin-bottom:0">以成都、重庆、西安为西部链接核心，我把想设计的每一样东西都「说」给它，它就一遍遍改，直到成图。</p>
+  <div class="meta"><span>📅 2026 · 09</span><span>🏷️ AI 绘图 · Codex</span><span>🧠 联网地图 · 中国地图完整性</span></div>
+</section>
+
+<!-- 成品 -->
+<section style="border-top:0">
+  <div class="sec-tag">成品 · The Map</div>
+  <h2 class="serif">西南联盟亚欧东盟铁路通道图</h2>
+  <p class="lead">从一句「帮我画一张地图」开始，改了很多轮，最后长成了这样——A3 横向、300dpi、可以直接打印。</p>
+  <figure class="figure">
+    <img src="assets/west-map.jpg" alt="西南联盟亚欧东盟铁路通道图" data-img="assets/west-map.jpg" data-cap="西南联盟亚欧东盟铁路通道图 · 重庆·成都·西安为中心节点 · A3 横向 300dpi">
+    <figcaption>▲ 重庆 · 成都 · 西安为中心节点，覆盖中亚、东盟与海外港口口径 · 点击查看大图</figcaption>
+  </figure>
+</section>
+
+<!-- 过程 -->
+<section>
+  <div class="sec-tag">过程 · How It Grew</div>
+  <h2 class="serif">一遍又一遍：这张图是怎么「长」出来的</h2>
+  <p class="lead">它不是一次生成的，是「我说一点、它改一点」磨出来的。每一轮我只负责一件事——<strong>把想设计的东西讲清楚</strong>。</p>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-title">第 1 轮 · 只有一个想法</div>
+      <div class="tl-body">「以成都、重庆、西安三个城市为西部链接核心，画一张对外通道示意图。」——第一版很粗糙，只有几条线。</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-title">第 2 轮 · 开始「点菜」</div>
+      <div class="tl-body">想加中亚方向？说。想标出边境口岸和海外港口？说。想区分中欧班列、东南亚出口、中亚资源三种线型？继续说。<strong>想设计什么，都去给它说。</strong></div>
+    </div>
+    <div class="tl-item warn">
+      <div class="tl-title">第 3 轮 · 关键转折：让它在联网地图上画</div>
+      <div class="tl-body">凭空画的位置总是「差不多」。后来改成让 Codex <strong>基于联网地图的真实经纬度来画</strong>——城市、口岸、海域的相对位置立刻对了，整张图的专业度上了一个台阶。</div>
+    </div>
+    <div class="tl-item bad">
+      <div class="tl-title">第 4 轮 · 一条不能碰的红线：中国地图完整性</div>
+      <div class="tl-body">示意地图也不行——<strong>国界、领土轮廓必须完整规范</strong>。AI 生成的图第一次很容易漏，我逐版检查、要求它修正，这是这张图能不能「拿出手」的底线。</div>
+    </div>
+    <div class="tl-item ok">
+      <div class="tl-title">第 5 轮 · 收尾打磨</div>
+      <div class="tl-body">图例、资料来源标注、经纬网格、A3 横向 300dpi 导出——最后几轮全是这种「不起眼但决定质感」的细节。</div>
+    </div>
+  </div>
+  <div class="insight" style="margin-top:26px">
+    <h4>💡 一句话总结这段过程</h4>
+    <p>AI 绘图不是「抽卡」，是「<strong>带图纸的对话</strong>」。你说得越具体，它改得越准；一轮一轮下来，图就从「差不多」长成了「是我想的那样」。</p>
+  </div>
+</section>
+
+<!-- 心得 -->
+<section>
+  <div class="sec-tag">心得 · Lessons</div>
+  <h2 class="serif">关于 Codex 画图，我想记住的三件事</h2>
+  <div class="grid g-3" style="margin-top:22px">
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#96753F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <h3>Codex 要额度，但不贵</h3>
+      <p>它<strong>需要额度才可以用</strong>，这一点要有心理预期。但真的不贵——和买域名的「奶茶钱」一样，属于<em>一顿饭的预算</em>，换来的产能完全值回票价。</p>
+      <span class="pill warn">先看额度，再开工</span>
+    </div>
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#96753F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+      <h3>一定要在联网地图上画</h3>
+      <p>这是我这一篇最大的经验：<strong>让 Codex 基于联网的真实地图来画</strong>，而不是让它凭记忆想象。坐标对了，整张图就「立得住」了。</p>
+      <span class="pill info">真实坐标 &gt; 凭空想象</span>
+    </div>
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B4453C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg></div>
+      <h3>中国地图完整性是红线</h3>
+      <p>无论多示意，<strong>领土轮廓必须完整规范</strong>。AI 生成的初版经常有疏漏，每一版都要亲自核对——<em>地图无小事</em>。</p>
+      <span class="pill bad">逐版检查，不能省</span>
+    </div>
+  </div>
+</section>
+
+</article>
+
+</div>
+
+<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="图片大图">
+  <div class="lb-inner">
+    <button class="lb-close" id="lbClose" aria-label="关闭">×</button>
+    <img id="lbImg" alt="">
+    <div class="caption" id="lbCap"></div>
+  </div>
+</div>
+<script>
+  const lb=document.getElementById('lightbox');
+  const lbImg=document.getElementById('lbImg');
+  const lbCap=document.getElementById('lbCap');
+  document.getElementById('lbClose').addEventListener('click',()=>{
+    lb.classList.remove('open');document.body.classList.remove('no-scroll');lbImg.src='';
+  });
+  lb.addEventListener('click',e=>{
+    if(e.target===lb){lb.classList.remove('open');document.body.classList.remove('no-scroll');lbImg.src='';}
+  });
+  document.querySelectorAll('[data-img]').forEach(el=>{
+    el.addEventListener('click',()=>{lbImg.src=el.dataset.img;lbCap.textContent=el.dataset.cap||'';lb.classList.add('open');document.body.classList.add('no-scroll');});
+  });
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('open')){lb.classList.remove('open');document.body.classList.remove('no-scroll');lbImg.src='';}});
+</script>
+
+<footer>
+  <p>李红芳 · AI 笔记 <span style="color:var(--accent)">◆</span> 2026</p>
+  <a class="back-home" href="index.html">← 返回首页</a>
+</footer>
+
+</body>
+</html>

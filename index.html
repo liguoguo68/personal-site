@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>李红芳 · 个人主页</title>
+<style>
+  :root{
+    --bg:#FAF7F2;          /* 米白 */
+    --bg-2:#F4EFE6;
+    --card:#FFFFFF;
+    --line:#E8E1D4;
+    --line-2:#DDD4C2;
+    --text:#2C2A26;
+    --muted:#8A8578;
+    --accent:#B08D57;      /* 香槟金 */
+    --accent-deep:#96753F;
+    --soft:#F0E9DC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{font-family:"Songti SC","Noto Serif SC","SimSun",serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:20;
+    background:rgba(250,247,242,.85);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex;align-items:center;gap:8px;padding:16px 0}
+  .brand{font-weight:700;letter-spacing:.2em;font-size:15px;color:var(--text);text-decoration:none;margin-right:auto}
+  .brand span{color:var(--accent)}
+  nav a.item{
+    text-decoration:none;color:var(--muted);font-size:14px;
+    padding:7px 16px;border-radius:999px;transition:.25s;
+  }
+  nav a.item:hover{color:var(--text);background:var(--soft)}
+  nav a.item.active{color:var(--accent-deep);background:var(--soft);font-weight:600}
+
+  /* HERO */
+  header.hero{padding:88px 0 72px}
+  .hero-grid{display:grid;grid-template-columns:340px 1fr;gap:72px;align-items:center}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:44px;justify-items:center;text-align:center}}
+
+  .photo-frame{
+    position:relative;width:320px;height:400px;
+  }
+  .photo-arch{
+    width:100%;height:100%;
+    border-radius:170px 170px 22px 22px;
+    overflow:hidden;
+    border:8px solid #FFFFFF;
+    outline:1px solid var(--line-2);
+    background:var(--soft);
+    box-shadow:0 30px 60px -28px rgba(120,100,70,.4);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .photo-arch img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.3,1)}
+  .photo-frame:hover .photo-arch img{transform:scale(1.05)}
+  .photo-badge{
+    position:absolute;right:16px;bottom:22px;z-index:2;
+    background:rgba(255,255,255,.92);border:1px solid var(--line-2);
+    border-radius:999px;padding:7px 16px;font-size:12px;letter-spacing:.2em;
+    color:var(--accent-deep);box-shadow:0 10px 24px -12px rgba(120,100,70,.45);
+    backdrop-filter:blur(6px);
+  }
+  .photo-fallback{display:none;flex-direction:column;align-items:center;gap:10px;color:var(--muted)}
+  .photo-fallback .mono{
+    width:110px;height:110px;border-radius:50%;
+    background:linear-gradient(135deg,var(--soft),var(--line));
+    display:grid;place-items:center;
+    font-size:44px;color:var(--accent-deep);
+  }
+  .photo-fallback small{font-size:12px;max-width:200px;text-align:center;line-height:1.6}
+  .photo-frame::before{
+    content:"";position:absolute;inset:-14px -14px auto auto;width:120px;height:120px;
+    border-top:1px solid var(--accent);border-right:1px solid var(--accent);
+    border-radius:0 150px 0 0;opacity:.5;
+  }
+  .photo-frame::after{
+    content:"";position:absolute;left:-14px;bottom:-14px;width:120px;height:120px;
+    border-bottom:1px solid var(--accent);border-left:1px solid var(--accent);
+    border-radius:0 0 0 22px;opacity:.5;
+  }
+
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-size:12px;letter-spacing:.35em;color:var(--accent-deep);
+    text-transform:uppercase;margin-bottom:18px;
+  }
+  .eyebrow::before{content:"";width:34px;height:1px;background:var(--accent)}
+  h1.name{font-size:clamp(38px,5vw,54px);font-weight:700;letter-spacing:.06em;line-height:1.2}
+  h1.name em{font-style:normal;color:var(--accent-deep)}
+  .roles{margin-top:14px;color:var(--muted);font-size:15.5px;letter-spacing:.04em}
+  .tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .tag{
+    font-size:13px;color:var(--text);background:var(--card);
+    border:1px solid var(--line-2);border-radius:999px;padding:6px 16px;
+  }
+  .tag.gold{color:var(--accent-deep);border-color:#D9C49B;background:#FBF6EC}
+  .intro{margin-top:26px;color:#5C574D;font-size:15px;max-width:560px}
+  @media(max-width:860px){.intro{margin-inline:auto}}
+
+  /* THREE DOORS */
+  .doors{padding:20px 0 90px}
+  .doors-head{text-align:center;margin-bottom:44px}
+  .doors-head .eyebrow{justify-content:center}
+  .doors-head .eyebrow::after{content:"";width:34px;height:1px;background:var(--accent)}
+  .doors-head h2{font-size:clamp(24px,3vw,32px);letter-spacing:.14em;font-weight:700}
+  .door-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  @media(max-width:860px){.door-grid{grid-template-columns:1fr;max-width:420px;margin-inline:auto}}
+  a.door{
+    text-decoration:none;color:inherit;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:20px;padding:44px 34px 38px;
+    display:flex;flex-direction:column;gap:14px;
+    transition:.35s cubic-bezier(.2,.7,.3,1);
+    position:relative;overflow:hidden;
+  }
+  a.door:hover{transform:translateY(-8px);box-shadow:0 34px 60px -30px rgba(120,100,70,.4);border-color:var(--line-2)}
+  a.door::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:3px;
+    background:linear-gradient(90deg,var(--accent),transparent);
+    transform:scaleX(0);transform-origin:left;transition:.4s;
+  }
+  a.door:hover::after{transform:scaleX(1)}
+  .door .num{
+    font-size:13px;letter-spacing:.3em;color:var(--accent-deep);
+  }
+  .door .icon{width:52px;height:52px;border-radius:14px;background:var(--soft);display:grid;place-items:center}
+  .door h3{font-size:22px;letter-spacing:.12em;font-weight:700}
+  .door p{color:var(--muted);font-size:14px;line-height:1.8}
+  .door .go{
+    margin-top:auto;padding-top:14px;font-size:13px;color:var(--accent-deep);
+    display:inline-flex;align-items:center;gap:6px;letter-spacing:.1em;
+  }
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--line);padding:36px 0 46px;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.08em}
+  footer .heart{color:var(--accent)}
+
+  /* POLISH */
+  header.hero{position:relative}
+  header.hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(520px 420px at 10% 6%, rgba(176,141,87,.10), transparent 65%),
+      radial-gradient(640px 480px at 94% 24%, rgba(176,141,87,.07), transparent 70%);
+  }
+  h1.name em{
+    background:linear-gradient(120deg,var(--accent) 10%,var(--accent-deep) 90%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero-grid > *{animation:rise .9s cubic-bezier(.2,.7,.3,1) both}
+  .hero-grid > .photo-frame{animation-delay:.05s}
+  .hero-grid > div:last-child{animation-delay:.18s}
+  .door-grid .door{animation:rise .9s cubic-bezier(.2,.7,.3,1) both}
+  .door:nth-child(1){animation-delay:.28s}
+  .door:nth-child(2){animation-delay:.36s}
+  .door:nth-child(3){animation-delay:.44s}
+  @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+  @media print{nav{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="brand serif" href="index.html">李红芳<span>。</span></a>
+    <a class="item active" href="index.html">首页</a>
+    <a class="item" href="ai-notes.html">AI 笔记</a>
+    <a class="item" href="research.html">科研</a>
+    <a class="item" href="hobbies.html">爱好</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+
+    <div class="photo-frame">
+      <div class="photo-arch">
+        <img src="assets/photo.jpg" alt="李红芳">
+      </div>
+      <span class="photo-badge serif">李红芳 · 成都大学</span>
+    </div>
+
+    <div>
+      <span class="eyebrow">Personal Profile</span>
+      <h1 class="name serif">李<em>红芳</em></h1>
+      <p class="roles">成都大学 商学院 · 工商管理 24-1 班<br>
+        商学院学生会 双创中心 &amp; 学研部 · 在任主席</p>
+
+      <div class="tags">
+        <span class="tag gold">四川 · 宜宾人</span>
+        <span class="tag">女</span>
+        <span class="tag">汉族</span>
+        <span class="tag">本科生</span>
+      </div>
+
+      <p class="intro">
+        一个喜欢把想法「上线」的人。白天在学生会里统筹双创与学研的大小事务，
+        晚上跟 AI 一起写页面、做笔记、搭网站。
+        这个站点收录了我的 AI 学习笔记、科研成果，和课余生活里的小小热爱。
+      </p>
+    </div>
+
+  </div>
+</header>
+
+<section class="doors">
+  <div class="wrap">
+    <div class="doors-head">
+      <span class="eyebrow">Explore</span>
+      <h2 class="serif">三个房间 · 欢迎来逛</h2>
+    </div>
+
+    <div class="door-grid">
+
+      <a class="door" href="ai-notes.html">
+        <span class="num serif">I</span>
+        <span class="icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#96753F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a5 5 0 0 0-5 5c0 1.5.6 2.7 1.5 3.7-.3.8-.9 1.5-1.8 2 1.2.5 2.4.6 3.5.3A5 5 0 1 0 12 3z"/>
+            <path d="M8.5 13.7C7.6 12.7 7 11.4 7 10"/><path d="M12 3v18M8 21h8"/>
+          </svg>
+        </span>
+        <h3 class="serif">AI 笔记</h3>
+        <p>从「网站只能活三小时」到永久上线——我用 AI 做个人网站的完整踩坑与心得复盘。</p>
+        <span class="go">进入笔记 →</span>
+      </a>
+
+      <a class="door" href="research.html">
+        <span class="num serif">II</span>
+        <span class="icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#96753F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/>
+            <path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/>
+          </svg>
+        </span>
+        <h3 class="serif">科研</h3>
+        <p>论文与软件著作权两个模块——记录我在学术路上的每一次认真尝试。</p>
+        <span class="go">查看成果 →</span>
+      </a>
+
+      <a class="door" href="hobbies.html">
+        <span class="num serif">III</span>
+        <span class="icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#96753F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>
+          </svg>
+        </span>
+        <h3 class="serif">爱好</h3>
+        <p>尤克里里、羽毛球、钢琴，还有逛街和追剧——工作之外的另外一半的我。</p>
+        <span class="go">去逛逛 →</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>李红芳 · 成都大学商学院 <span class="heart">◆</span> 工商管理 24-1</p>
+  <p style="margin-top:6px;font-size:12px">Designed &amp; built with AI · 2026</p>
+</footer>
+
+</body>
+</html>

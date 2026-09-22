@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>科研 · 论文、软著与竞赛 | 李红芳</title>
+<style>
+  :root{
+    --bg:#FAF7F2;--bg-2:#F4EFE6;--card:#FFFFFF;
+    --line:#E8E1D4;--line-2:#DDD4C2;
+    --text:#2C2A26;--muted:#8A8578;
+    --accent:#B08D57;--accent-deep:#96753F;--soft:#F0E9DC;
+    --shadow:0 24px 50px -26px rgba(120,100,70,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;line-height:1.8;-webkit-font-smoothing:antialiased}
+  .serif{font-family:"Songti SC","Noto Serif SC","SimSun",serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  nav{position:sticky;top:0;z-index:20;background:rgba(250,247,242,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;gap:8px;padding:16px 0}
+  .brand{font-weight:700;letter-spacing:.2em;font-size:15px;color:var(--text);text-decoration:none;margin-right:auto}
+  .brand span{color:var(--accent)}
+  nav a.item{text-decoration:none;color:var(--muted);font-size:14px;padding:7px 16px;border-radius:999px;transition:.25s}
+  nav a.item:hover{color:var(--text);background:var(--soft)}
+  nav a.item.active{color:var(--accent-deep);background:var(--soft);font-weight:600}
+
+  header.page-head{padding:70px 0 30px;text-align:center;position:relative}
+  .eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.35em;color:var(--accent-deep);text-transform:uppercase}
+  .eyebrow::before,.eyebrow::after{content:"";width:34px;height:1px;background:var(--accent)}
+  h1{font-size:clamp(30px,4vw,44px);font-weight:700;letter-spacing:.08em;margin:18px 0 10px}
+  h1 em{font-style:normal;background:linear-gradient(120deg,var(--accent) 10%,var(--accent-deep) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);max-width:680px;margin:0 auto;font-size:15px}
+
+  /* SUMMARY STRIP */
+  .summary{
+    margin:36px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:720px;
+  }
+  .summary .it{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 14px;text-align:center;
+    box-shadow:var(--shadow);
+  }
+  .summary .it b{font-size:28px;color:var(--accent-deep);font-family:"Songti SC",serif;display:block}
+  .summary .it span{font-size:12.5px;color:var(--muted);letter-spacing:.1em}
+  @media(max-width:780px){.summary{grid-template-columns:repeat(2,1fr)}}
+
+  section{padding:54px 0;border-top:1px solid var(--line);position:relative}
+  .sec-tag{font-size:12px;letter-spacing:.3em;color:var(--accent-deep);text-transform:uppercase;margin-bottom:8px}
+  h2{font-size:clamp(22px,2.6vw,30px);letter-spacing:.06em;margin-bottom:8px}
+  .lead{color:var(--muted);font-size:15px;margin-bottom:30px;max-width:680px}
+
+  /* PAPER CARD */
+  .paper{
+    background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px;box-shadow:var(--shadow);
+    display:grid;grid-template-columns:1fr 360px;gap:32px;align-items:start;
+  }
+  .paper .body h3{font-size:19px;line-height:1.55;letter-spacing:.03em;margin-bottom:6px}
+  .paper .venue{color:var(--accent-deep);font-size:13.5px;letter-spacing:.06em;margin-bottom:14px}
+  .paper .authors{color:var(--muted);font-size:13px;margin-bottom:14px}
+  .paper .authors b{color:var(--text)}
+  .paper p{color:#5C574D;font-size:14.5px}
+  .paper .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .chip{font-size:12px;color:var(--muted);border:1px solid var(--line-2);border-radius:999px;padding:3px 12px;background:#fff}
+  .chip.gold{color:var(--accent-deep);border-color:#D9C49B;background:#FBF6EC}
+  .chip.author{color:var(--accent-deep);border-color:#D9C49B;background:#FBF6EC;font-weight:600}
+
+  .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .thumb{
+    position:relative;border:1px solid var(--line-2);border-radius:12px;overflow:hidden;background:var(--soft);
+    aspect-ratio:3/4;cursor:pointer;transition:.25s;
+  }
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:.4s}
+  .thumb::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.45));opacity:0;transition:.25s;z-index:1}
+  .thumb:hover{transform:translateY(-3px);box-shadow:0 18px 32px -16px rgba(120,100,70,.4)}
+  .thumb:hover img{transform:scale(1.05)}
+  .thumb:hover::before{opacity:1}
+  .thumb span{position:absolute;left:8px;bottom:8px;right:8px;color:#fff;font-size:11px;letter-spacing:.06em;text-align:center;opacity:0;transition:.25s;z-index:2}
+
+  @media(max-width:780px){.paper{grid-template-columns:1fr}.thumbs{grid-template-columns:repeat(3,1fr)}}
+
+  /* SOFT COPY */
+  .soft{
+    background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px;box-shadow:var(--shadow);
+    display:grid;grid-template-columns:1fr 220px;gap:30px;align-items:center;
+  }
+  .soft .no{
+    width:100%;aspect-ratio:3/4;border-radius:14px;overflow:hidden;border:1px solid var(--line-2);
+    background:var(--soft);cursor:pointer;position:relative;
+  }
+  .soft .no img{width:100%;height:100%;object-fit:cover;display:block}
+  .soft .no::after{content:"点击查看大图";position:absolute;left:0;right:0;bottom:0;padding:8px 0;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;font-size:11px;letter-spacing:.1em;text-align:center;opacity:0;transition:.25s}
+  .soft .no:hover::after{opacity:1}
+  .soft .body h3{font-size:18px;letter-spacing:.03em;margin-bottom:8px;line-height:1.5}
+  .soft .venue{color:var(--accent-deep);font-size:13px;letter-spacing:.06em;margin-bottom:12px}
+  .soft p{color:#5C574D;font-size:14.5px}
+  @media(max-width:780px){.soft{grid-template-columns:1fr}.soft .no{max-width:240px}}
+
+  /* CERT GRID */
+  .certs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+  .cert{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;transition:.3s cubic-bezier(.2,.7,.3,1);
+  }
+  .cert:hover{transform:translateY(-5px);box-shadow:0 28px 50px -26px rgba(120,100,70,.45)}
+  .cert .img{
+    aspect-ratio:4/3;overflow:hidden;background:var(--soft);position:relative;cursor:pointer;
+    border-bottom:1px solid var(--line-2);
+  }
+  .cert .img img{width:100%;height:100%;object-fit:cover;transition:.5s}
+  .cert:hover .img img{transform:scale(1.06)}
+  .cert .img::after{
+    content:"🔍  点击查看证书";position:absolute;inset:0;display:grid;place-items:center;
+    background:rgba(28,26,22,.55);color:#fff;font-size:13px;letter-spacing:.1em;
+    opacity:0;transition:.25s;
+  }
+  .cert .img:hover::after{opacity:1}
+  .cert .info{padding:18px 18px 20px}
+  .cert .level{font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent-deep);font-weight:600}
+  .cert h4{font-size:15.5px;line-height:1.45;margin:6px 0 6px;letter-spacing:.02em}
+  .cert .when{font-size:12.5px;color:var(--muted)}
+  .cert .ribbon{
+    display:inline-block;font-size:11px;letter-spacing:.1em;padding:3px 10px;border-radius:999px;
+    background:#FBF6EC;border:1px solid #E0CFA9;color:var(--accent-deep);margin-top:10px;
+  }
+  .cert .ribbon.guoji{background:#fff;border-color:#D9C49B;color:var(--accent-deep)}
+  .cert .ribbon.shengji{background:#F4EFE6;border-color:var(--line-2);color:var(--muted)}
+  .cert .ribbon.xiaoji{background:#FAF7F2;border-color:var(--line);color:var(--muted)}
+
+  /* MODAL */
+  .vmodal{
+    position:fixed;inset:0;z-index:100;background:rgba(20,18,14,.92);backdrop-filter:blur(10px);
+    display:none;align-items:center;justify-content:center;padding:32px;opacity:0;transition:opacity .3s;
+  }
+  .vmodal.open{display:flex;opacity:1}
+  .vmodal-inner{
+    position:relative;max-width:min(960px,96vw);max-height:92vh;background:#fff;border-radius:14px;overflow:hidden;
+    box-shadow:0 40px 80px -20px rgba(0,0,0,.6);animation:pop .35s cubic-bezier(.2,.7,.3,1) both;
+  }
+  .vmodal img{display:block;max-width:100%;max-height:92vh;width:auto;height:auto;margin:0 auto;background:#000}
+  .vmodal .caption{padding:14px 22px;font-size:13px;color:#5C574D;border-top:1px solid var(--line);background:#FAF7F2}
+  .vmodal-close{
+    position:absolute;right:-52px;top:0;width:40px;height:40px;border:0;border-radius:50%;
+    background:rgba(255,255,255,.18);color:#fff;font-size:22px;cursor:pointer;
+    display:grid;place-items:center;transition:.2s;
+  }
+  .vmodal-close:hover{background:rgba(255,255,255,.34)}
+  @media(max-width:780px){.vmodal-close{right:8px;top:-52px}}
+  @keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+  body.no-scroll{overflow:hidden}
+
+  /* ANIMATE */
+  .pub,.cert,.paper,.soft{animation:rise .8s cubic-bezier(.2,.7,.3,1) both}
+  .summary .it:nth-child(1){animation-delay:.05s}
+  .summary .it:nth-child(2){animation-delay:.12s}
+  .summary .it:nth-child(3){animation-delay:.19s}
+  .summary .it:nth-child(4){animation-delay:.26s}
+  @keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+  footer{border-top:1px solid var(--line);padding:40px 0 56px;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.06em}
+  .back-home{display:inline-block;margin-top:10px;color:var(--accent-deep);text-decoration:none}
+  .back-home:hover{text-decoration:underline}
+  @media print{nav{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="brand serif" href="index.html">李红芳<span>。</span></a>
+    <a class="item" href="index.html">首页</a>
+    <a class="item" href="ai-notes.html">AI 笔记</a>
+    <a class="item active" href="research.html">科研</a>
+    <a class="item" href="hobbies.html">爱好</a>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">Research</span>
+    <h1 class="serif">论文 · 软著 · 竞赛</h1>
+    <p class="sub">认真对待每一次研究尝试。这里收录我在科研训练、创新创业与学科竞赛里留下的足迹。</p>
+
+    <div class="summary">
+      <div class="it"><b>1</b><span>已发表论文</span></div>
+      <div class="it"><b>1</b><span>软件著作权</span></div>
+      <div class="it"><b>7</b><span>学科竞赛奖项</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 论文 -->
+  <section>
+    <div class="sec-tag">Module I</div>
+    <h2 class="serif">论文</h2>
+    <p class="lead">以第一作者身份在省级一般刊物发表的乡村振兴主题研究。</p>
+
+    <article class="paper">
+      <div class="body">
+        <h3>在乡村振兴战略背景下，针对非物质文化遗产助力凉山黑猪产业发展展开的研究</h3>
+        <div class="venue">《旅游画刊》· 一般刊物 · 2025 年 11 月录用 · 2026 年 4 月见刊（第 25 卷第 4 期）</div>
+        <div class="authors">
+          作者：<b>李红芳</b>（第一作者）、刘永冠、王锐　·　指导老师：成都大学商学院
+        </div>
+        <p>
+          基于团队 2025 年大学生创新训练计划（国家级立项）的实地调研与一手资料，
+          从凉山黑猪产业的非遗文化内涵出发，探讨非物质文化遗产在品牌建设、
+          产品差异化与产业链延伸中的赋能路径，提出「文化赋能 + 区块链溯源」
+          协同助力乡村振兴的可行模型。
+        </p>
+        <div class="meta-row">
+          <span class="chip author">第一作者</span>
+          <span class="chip gold">已见刊</span>
+          <span class="chip">乡村振兴</span>
+          <span class="chip">非遗</span>
+          <span class="chip">凉山黑猪</span>
+        </div>
+      </div>
+
+      <div class="thumbs">
+        <div class="thumb" data-img="assets/research/paper-cover.jpg"     data-cap="《旅游画刊》论文封面">
+          <img src="assets/research/paper-cover.jpg" alt="普刊封面"><span>论文封面</span>
+        </div>
+        <div class="thumb" data-img="assets/research/paper-index.jpg"     data-cap="《旅游画刊》论文目录">
+          <img src="assets/research/paper-index.jpg" alt="普刊目录"><span>论文目录</span>
+        </div>
+        <div class="thumb" data-img="assets/research/paper-acceptance.png" data-cap="编辑部录用通知">
+          <img src="assets/research/paper-acceptance.png" alt="录用通知"><span>录用通知</span>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- 软著 -->
+  <section>
+    <div class="sec-tag">Module II</div>
+    <h2 class="serif">软件著作权</h2>
+    <p class="lead">在大创项目期间主导设计与开发的软件作品，已获国家版权局登记。</p>
+
+    <article class="soft">
+      <div class="body">
+        <h3>基于区块链溯源的凉山特色农产品<br>差异化营销平台</h3>
+        <div class="venue">计算机软件著作权 · 著作权人：李红芳等 · 已登记</div>
+        <p>
+          配套 2025 年国家级大学生创新创业训练计划项目：将区块链溯源技术与
+          凉山特色农产品（非遗文化 IP）相结合，构建从产地、加工到销售全链路
+          可信追溯的差异化营销平台。
+          本人为团队负责人，主导需求分析、整体架构与论文 / 软著撰写。
+        </p>
+        <div class="meta-row">
+          <span class="chip gold">著作权人</span>
+          <span class="chip gold">已登记</span>
+          <span class="chip">区块链溯源</span>
+          <span class="chip">农产品营销</span>
+          <span class="chip">大创衍生</span>
+        </div>
+      </div>
+      <div class="no" data-img="assets/research/soft-copyright.jpg" data-cap="软件著作权登记证书">
+        <img src="assets/research/soft-copyright.jpg" alt="软件著作权证书">
+      </div>
+    </article>
+  </section>
+
+  <!-- 学科竞赛与科研训练 -->
+  <section>
+    <div class="sec-tag">Module III</div>
+    <h2 class="serif">学科竞赛与科研训练</h2>
+    <p class="lead">校级以上主要成果，按级别由高到低排列。点开任一证书可查看大图。</p>
+
+    <div class="certs">
+
+      <div class="cert">
+        <div class="img" data-img="assets/research/cert-qimo-2025.jpg" data-cap="2025 年全国企业竞争模拟大赛 · 全国二等奖">
+          <img src="assets/research/cert-qimo-2025.jpg" alt="2025 企模国二">
+        </div>
+        <div class="info">
+          <div class="level">National · II</div>
+          <h4>全国企业竞争模拟大赛</h4>
+          <div class="when">2025 · 大一下学期 · 团队核心成员</div>
+          <span class="ribbon guoji">国家级 · 二等奖</span>
+        </div>
+      </div>
+
+      <div class="cert">
+        <div class="img" data-img="assets/research/cert-qimo-2026.jpg" data-cap="2026 年全国企业竞争模拟大赛 · 全国二等奖">
+          <img src="assets/research/cert-qimo-2026.jpg" alt="2026 企模二等奖">
+        </div>
+        <div class="info">
+          <div class="level">National · II</div>
+          <h4>全国企业竞争模拟大赛（线下决赛）</h4>
+          <div class="when">2026 · 河北唐山 · 团队核心成员</div>
+          <span class="ribbon guoji">国家级 · 二等奖</span>
+        </div>
+      </div>
+
+      <div class="cert">
+        <div class="img" data-img="assets/research/cert-pinpai.jpg" data-cap="2026 年品牌策划赛道 · 全国三等奖">
+          <img src="assets/research/cert-pinpai.jpg" alt="2026 品牌策划国三">
+        </div>
+        <div class="info">
+          <div class="level">National · III</div>
+          <h4>全国高校商业精英挑战赛 · 品牌策划赛道</h4>
+          <div class="when">2026 · 全国三等奖</div>
+          <span class="ribbon guoji">国家级 · 三等奖</span>
+        </div>
+      </div>
+
+      <div class="cert">
+        <div class="img" data-img="assets/research/cert-qiguan-2025.jpg" data-cap="2025 年四川省大学生企业管理挑战赛 · 省级二等奖">
+          <img src="assets/research/cert-qiguan-2025.jpg" alt="四川企管省二">
+        </div>
+        <div class="info">
+          <div class="level">Provincial · II</div>
+          <h4>四川省大学生企业管理挑战赛</h4>
+          <div class="when">2025 · 大二上学期</div>
+          <span class="ribbon shengji">省级 · 二等奖</span>
+        </div>
+      </div>
+
+      <div class="cert">
+        <div class="img" data-img="assets/research/cert-xuechuang.jpg" data-cap="2025 年学创杯 · 省级三等奖">
+          <img src="assets/research/cert-xuechuang.jpg" alt="学创杯省三">
+        </div>
+        <div class="info">
+          <div class="level">Provincial · III</div>
+          <h4>学创杯全国大学生创业综合模拟大赛</h4>
+          <div class="when">2025 · 大一下学期 · 四川省</div>
+          <span class="ribbon shengji">省级 · 三等奖</span>
+        </div>
+      </div>
+
+      <div class="cert">
+        <div class="img" data-img="assets/research/cert-nengyuan.jpg" data-cap="全国大学生能源经济学术创意大赛 · 省级三等奖">
+          <img src="assets/research/cert-nengyuan.jpg" alt="能源经济省三">
+        </div>
+        <div class="info">
+          <div class="level">Provincial · III</div>
+          <h4>全国大学生能源经济学术创意大赛</h4>
+          <div class="when">2025 · 队长 · 四川省</div>
+          <span class="ribbon shengji">省级 · 三等奖</span>
+        </div>
+      </div>
+
+      <div class="cert">
+        <div class="img" data-img="assets/research/cert-boxuege.jpg" data-cap="第六届成都大学博学格商创意大赛 · 院级一等奖">
+          <img src="assets/research/cert-boxuege.jpg" alt="博学格商院一">
+        </div>
+        <div class="info">
+          <div class="level">School · I</div>
+          <h4>第六届成都大学博学格商创意大赛</h4>
+          <div class="when">2025 · 大二上学期</div>
+          <span class="ribbon xiaoji">院级 · 一等奖</span>
+        </div>
+      </div>
+
+      </div>
+  </section>
+
+</div>
+
+<div class="vmodal" id="vmodal" role="dialog" aria-modal="true" aria-label="证书大图">
+  <div class="vmodal-inner">
+    <button class="vmodal-close" id="vclose" aria-label="关闭">×</button>
+    <img id="vimg" alt="">
+    <div class="caption" id="vcap"></div>
+  </div>
+</div>
+
+<footer>
+  <p>李红芳 · 科研 <span style="color:var(--accent)">◆</span> 2026</p>
+  <a class="back-home" href="index.html">← 返回首页</a>
+</footer>
+
+<script>
+  const modal=document.getElementById('vmodal');
+  const vimg=document.getElementById('vimg');
+  const vcap=document.getElementById('vcap');
+  const closeBtn=document.getElementById('vclose');
+  function open(src,cap){
+    vimg.src=src;
+    vcap.textContent=cap||'';
+    modal.classList.add('open');
+    document.body.classList.add('no-scroll');
+  }
+  function close(){
+    modal.classList.remove('open');
+    document.body.classList.remove('no-scroll');
+    vimg.src='';
+  }
+  document.querySelectorAll('[data-img]').forEach(el=>{
+    el.addEventListener('click',()=>open(el.dataset.img,el.dataset.cap));
+  });
+  modal.addEventListener('click',e=>{if(e.target===modal)close();});
+  closeBtn.addEventListener('click',close);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))close();});
+</script>
+
+</body>
+</html>

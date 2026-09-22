@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>爱好 | 李红芳</title>
+<style>
+  :root{
+    --bg:#FAF7F2;--bg-2:#F4EFE6;--card:#FFFFFF;
+    --line:#E8E1D4;--line-2:#DDD4C2;
+    --text:#2C2A26;--muted:#8A8578;
+    --accent:#B08D57;--accent-deep:#96753F;--soft:#F0E9DC;
+    --shadow:0 24px 50px -26px rgba(120,100,70,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;line-height:1.8;-webkit-font-smoothing:antialiased}
+  .serif{font-family:"Songti SC","Noto Serif SC","SimSun",serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 28px}
+
+  nav{position:sticky;top:0;z-index:20;background:rgba(250,247,242,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;gap:8px;padding:16px 0}
+  .brand{font-weight:700;letter-spacing:.2em;font-size:15px;color:var(--text);text-decoration:none;margin-right:auto}
+  .brand span{color:var(--accent)}
+  nav a.item{text-decoration:none;color:var(--muted);font-size:14px;padding:7px 16px;border-radius:999px;transition:.25s}
+  nav a.item:hover{color:var(--text);background:var(--soft)}
+  nav a.item.active{color:var(--accent-deep);background:var(--soft);font-weight:600}
+
+  header.page-head{padding:70px 0 36px;text-align:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.35em;color:var(--accent-deep);text-transform:uppercase}
+  .eyebrow::before,.eyebrow::after{content:"";width:34px;height:1px;background:var(--accent)}
+  h1{font-size:clamp(30px,4vw,44px);font-weight:700;letter-spacing:.08em;margin:18px 0 10px}
+  .sub{color:var(--muted);max-width:600px;margin:0 auto;font-size:15px}
+
+  section{padding:52px 0;border-top:1px solid var(--line)}
+  .hobby{display:grid;grid-template-columns:300px 1fr;gap:40px;align-items:center;margin-bottom:64px}
+  .hobby:last-child{margin-bottom:10px}
+  .hobby:nth-child(even) .art{order:2}
+  @media(max-width:780px){.hobby{grid-template-columns:1fr;gap:22px}.hobby:nth-child(even) .art{order:0}}
+  .art{border-radius:20px;overflow:hidden;border:1px solid var(--line-2);box-shadow:var(--shadow);background:var(--soft)}
+  .art svg{display:block;width:100%;height:auto}
+  .art .photo-cover{display:block;width:100%;aspect-ratio:600/380;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.3,1)}
+  .art:hover .photo-cover{transform:scale(1.04)}
+  .no{font-size:12px;letter-spacing:.3em;color:var(--accent-deep);text-transform:uppercase}
+  h2{font-size:clamp(24px,3vw,32px);letter-spacing:.1em;margin:10px 0 12px}
+  .hobby p{color:#5C574D;font-size:15px;max-width:520px}
+  .tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .tag{font-size:13px;color:var(--muted);background:#fff;border:1px solid var(--line-2);border-radius:999px;padding:5px 14px}
+  .tag.gold{color:var(--accent-deep);border-color:#D9C49B;background:#FBF6EC}
+
+  footer{border-top:1px solid var(--line);padding:40px 0 56px;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.06em}
+  .back-home{display:inline-block;margin-top:10px;color:var(--accent-deep);text-decoration:none}
+  .back-home:hover{text-decoration:underline}
+
+  /* VIDEO CARD */
+  .video-card{
+    position:relative;display:block;width:100%;padding:0;border:0;background:transparent;
+    border-radius:20px;overflow:hidden;cursor:pointer;
+    border:1px solid var(--line-2);box-shadow:var(--shadow);
+    font:inherit;color:inherit;
+  }
+  .video-card .art-inner{position:relative;display:block}
+  .video-card svg{display:block;width:100%;height:auto}
+  .play-btn{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:78px;height:78px;border-radius:50%;
+    background:rgba(255,255,255,.95);
+    display:grid;place-items:center;
+    box-shadow:0 18px 40px -16px rgba(0,0,0,.4);
+    transition:.3s cubic-bezier(.2,.7,.3,1);
+  }
+  .play-btn::before{
+    content:"";display:block;width:0;height:0;
+    border-style:solid;border-width:14px 0 14px 22px;
+    border-color:transparent transparent transparent var(--accent-deep);
+    margin-left:5px;
+  }
+  .video-card:hover .play-btn{transform:translate(-50%,-50%) scale(1.08);background:#fff}
+  .video-tag{
+    position:absolute;left:14px;top:14px;
+    background:rgba(255,255,255,.92);border:1px solid var(--line-2);
+    border-radius:999px;padding:5px 12px;font-size:11px;letter-spacing:.2em;
+    color:var(--accent-deep);backdrop-filter:blur(6px);
+    text-transform:uppercase;font-weight:600;
+  }
+  .video-meta{
+    position:absolute;right:14px;bottom:14px;
+    background:rgba(28,26,22,.78);color:#fff;
+    border-radius:999px;padding:5px 12px;font-size:11px;letter-spacing:.12em;
+    backdrop-filter:blur(6px);
+  }
+
+  /* MODAL */
+  .vmodal{
+    position:fixed;inset:0;z-index:100;
+    background:rgba(20,18,14,.86);
+    backdrop-filter:blur(10px);
+    display:none;align-items:center;justify-content:center;
+    padding:32px;opacity:0;transition:opacity .3s;
+  }
+  .vmodal.open{display:flex;opacity:1}
+  .vmodal-inner{
+    position:relative;width:min(960px,100%);max-height:88vh;
+    aspect-ratio:16/9;background:#000;border-radius:16px;overflow:hidden;
+    box-shadow:0 40px 80px -20px rgba(0,0,0,.6);
+    animation:pop .35s cubic-bezier(.2,.7,.3,1) both;
+  }
+  .vmodal video{width:100%;height:100%;display:block;background:#000}
+  .vmodal-close{
+    position:absolute;right:-52px;top:0;width:40px;height:40px;border:0;border-radius:50%;
+    background:rgba(255,255,255,.18);color:#fff;font-size:22px;cursor:pointer;
+    display:grid;place-items:center;transition:.2s;
+  }
+  .vmodal-close:hover{background:rgba(255,255,255,.34)}
+  @media(max-width:780px){.vmodal-close{right:8px;top:-52px}}
+  @keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+  body.no-scroll{overflow:hidden}
+
+  @media print{nav{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="brand serif" href="index.html">李红芳<span>。</span></a>
+    <a class="item" href="index.html">首页</a>
+    <a class="item" href="ai-notes.html">AI 笔记</a>
+    <a class="item" href="research.html">科研</a>
+    <a class="item active" href="hobbies.html">爱好</a>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">Hobbies</span>
+    <h1 class="serif">爱好</h1>
+    <p class="sub">工作之外的另外一半的我——音乐、运动、生活里的小确幸。</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 尤克里里 -->
+  <section>
+    <div class="hobby">
+      <div class="art">
+        <button class="video-card" data-video="assets/ukulele.mp4" aria-label="播放尤克里里视频">
+          <div class="art-inner">
+            <svg viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg" aria-label="尤克里里插画">
+              <defs><linearGradient id="uk-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E9D3A8"/><stop offset="1" stop-color="#C9A061"/></linearGradient></defs>
+              <rect width="600" height="380" fill="#F4EFE6"/>
+              <circle cx="480" cy="60" r="110" fill="#F0E9DC"/>
+              <g transform="rotate(-24 300 190)">
+                <rect x="272" y="40" width="16" height="190" rx="8" fill="#B08D57"/>
+                <rect x="268" y="30" width="24" height="26" rx="6" fill="#96753F"/>
+                <ellipse cx="280" cy="290" rx="98" ry="82" fill="url(#uk-g)"/>
+                <ellipse cx="280" cy="290" rx="98" ry="82" fill="none" stroke="#A8814B" stroke-width="3"/>
+                <circle cx="280" cy="282" r="30" fill="#F4EFE6" stroke="#A8814B" stroke-width="3"/>
+                <rect x="252" y="360" width="10" height="10" rx="2" fill="#96753F"/>
+                <rect x="298" y="360" width="10" height="10" rx="2" fill="#96753F"/>
+                <line x1="266" y1="60" x2="262" y2="282" stroke="#7A5F35" stroke-width="2"/>
+                <line x1="280" y1="58" x2="276" y2="282" stroke="#7A5F35" stroke-width="2"/>
+                <line x1="294" y1="60" x2="290" y2="282" stroke="#7A5F35" stroke-width="2"/>
+              </g>
+              <text x="36" y="344" fill="#96753F" font-family="Georgia,serif" font-size="20" font-style="italic">Ukulele ♪</text>
+            </svg>
+            <span class="video-tag">▶ Video</span>
+            <span class="video-meta">点击播放</span>
+            <span class="play-btn" aria-hidden="true"></span>
+          </div>
+        </button>
+      </div>
+      <div>
+        <span class="no">Hobby 01 · Music</span>
+        <h2 class="serif">尤克里里</h2>
+        <p>四根弦的小乐器，是最容易获得快乐的方式。和弦按错也没关系——弹的就是一个开心。最享受的时刻，是忙碌一天后抱着它随便扫几个和弦，什么都不想。</p>
+        <div class="tags"><span class="tag gold">弹唱</span><span class="tag">指弹入门</span><span class="tag">自娱自乐</span></div>
+      </div>
+    </div>
+
+    <!-- 羽毛球 -->
+    <div class="hobby">
+      <div class="art">
+        <img class="photo-cover" src="assets/badminton.jpg" alt="羽毛球时光">
+      </div>
+      <div>
+        <span class="no">Hobby 02 · Sport</span>
+        <h2 class="serif">羽毛球</h2>
+        <p>出出汗、追着球跑，是解压最快的方式。喜欢每一拍来回的节奏感——像极了做事情的状态：专注、反应、再来一球。</p>
+        <div class="tags"><span class="tag gold">单打 / 双打</span><span class="tag">每周固定运动</span><span class="tag">解压神器</span></div>
+      </div>
+    </div>
+
+    <!-- 钢琴 -->
+    <div class="hobby">
+      <div class="art">
+        <button class="video-card" data-video="assets/piano.mp4" aria-label="播放钢琴视频">
+          <div class="art-inner">
+            <svg viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg" aria-label="钢琴插画">
+              <rect width="600" height="380" fill="#F4EFE6"/>
+              <circle cx="500" cy="80" r="110" fill="#F0E9DC"/>
+              <g transform="translate(70,80)">
+                <rect x="0" y="0" width="460" height="150" rx="10" fill="#2C2A26"/>
+                <rect x="16" y="14" width="428" height="52" rx="6" fill="#211E19"/>
+                <text x="230" y="48" text-anchor="middle" fill="#B08D57" font-family="Georgia,serif" font-size="18" font-style="italic">♪ Pianoforte ♪</text>
+                <rect x="0" y="66" width="460" height="84" rx="6" fill="#FAF7F2"/>
+                <g fill="#FAF7F2" stroke="#DDD4C2" stroke-width="1">
+                  <rect x="16" y="66" width="46" height="84"/><rect x="64" y="66" width="46" height="84"/><rect x="112" y="66" width="46" height="84"/><rect x="160" y="66" width="46" height="84"/><rect x="208" y="66" width="46" height="84"/><rect x="256" y="66" width="46" height="84"/><rect x="304" y="66" width="46" height="84"/><rect x="352" y="66" width="46" height="84"/><rect x="400" y="66" width="46" height="84"/>
+                </g>
+                <g fill="#211E19">
+                  <rect x="50" y="66" width="26" height="50" rx="2"/><rect x="98" y="66" width="26" height="50" rx="2"/>
+                  <rect x="182" y="66" width="26" height="50" rx="2"/><rect x="230" y="66" width="26" height="50" rx="2"/><rect x="278" y="66" width="26" height="50" rx="2"/>
+                  <rect x="350" y="66" width="26" height="50" rx="2"/><rect x="398" y="66" width="26" height="50" rx="2"/>
+                </g>
+                <rect x="-24" y="150" width="26" height="90" rx="4" fill="#96753F"/>
+                <rect x="458" y="150" width="26" height="90" rx="4" fill="#96753F"/>
+              </g>
+              <text x="70" y="356" fill="#96753F" font-family="Georgia,serif" font-size="20" font-style="italic">Piano ♩♪</text>
+            </svg>
+            <span class="video-tag">▶ Video</span>
+            <span class="video-meta">点击播放</span>
+            <span class="play-btn" aria-hidden="true"></span>
+          </div>
+        </button>
+      </div>
+      <div>
+        <span class="no">Hobby 03 · Music</span>
+        <h2 class="serif">钢琴</h2>
+        <p>从断断续续的音符到完整的一段旋律，钢琴教会我的是「慢练」。它是与尤克里里完全不同的体验——更安静、更专注，也更需要耐心。</p>
+        <div class="tags"><span class="tag gold">古典入门</span><span class="tag">流行曲改编</span><span class="tag">慢练哲学</span></div>
+      </div>
+    </div>
+
+    <!-- 逛街 -->
+    <div class="hobby">
+      <div class="art">
+        <img class="photo-cover" src="assets/shopping.jpg" alt="逛超市的日常">
+      </div>
+      <div>
+        <span class="no">Hobby 04 · Life</span>
+        <h2 class="serif">逛街</h2>
+        <p>不只是买东西——更是把城市当展览馆逛：新开的咖啡店、路过的书店、橱窗里的搭配灵感。用脚步丈量一座城市的烟火气。</p>
+        <div class="tags"><span class="tag gold">City Walk</span><span class="tag">咖啡探店</span><span class="tag">发现小美好</span></div>
+      </div>
+    </div>
+
+    <!-- 追剧 -->
+    <div class="hobby">
+      <div class="art">
+        <img class="photo-cover" src="assets/drama.jpg" alt="追剧——周星驰现场" style="object-position:center 20%">
+      </div>
+      <div>
+        <span class="no">Hobby 05 · Life</span>
+        <h2 class="serif">追剧</h2>
+        <p>好剧是别人的故事，也是自己的镜子。悬疑让我思考，温情让我放松——认真追剧也是一种「输入」，跟读书一样值得。</p>
+        <div class="tags"><span class="tag gold">悬疑推理</span><span class="tag">治愈系</span><span class="tag">周末限定</span></div>
+      </div>
+    </div>
+
+    <!-- 猫 -->
+    <div class="hobby">
+      <div class="art">
+        <button class="video-card" data-video="assets/cat.mp4" aria-label="播放猫咪视频">
+          <div class="art-inner">
+            <svg viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg" aria-label="猫咪插画">
+              <rect width="600" height="380" fill="#F4EFE6"/>
+              <circle cx="480" cy="60" r="110" fill="#F0E9DC"/>
+              <g transform="translate(210,80)">
+                <path d="M60 60 L45 15 L95 45 Z" fill="#E9D3A8" stroke="#A8814B" stroke-width="3" stroke-linejoin="round"/>
+                <path d="M180 60 L195 15 L145 45 Z" fill="#E9D3A8" stroke="#A8814B" stroke-width="3" stroke-linejoin="round"/>
+                <ellipse cx="120" cy="140" rx="90" ry="85" fill="#E9D3A8" stroke="#A8814B" stroke-width="3"/>
+                <path d="M60 125 C 75 112, 90 112, 100 122" fill="none" stroke="#7A5F35" stroke-width="4" stroke-linecap="round"/>
+                <path d="M180 125 C 165 112, 150 112, 140 122" fill="none" stroke="#7A5F35" stroke-width="4" stroke-linecap="round"/>
+                <ellipse cx="88" cy="140" rx="10" ry="14" fill="#5C4A2A"/>
+                <ellipse cx="152" cy="140" rx="10" ry="14" fill="#5C4A2A"/>
+                <ellipse cx="90" cy="134" rx="3.5" ry="5" fill="#fff"/>
+                <ellipse cx="154" cy="134" rx="3.5" ry="5" fill="#fff"/>
+                <path d="M120 162 C 112 162, 108 166, 112 172 C 116 176, 124 176, 128 172 C 132 166, 128 162, 120 162 Z" fill="#C9927E"/>
+                <path d="M120 176 C 120 186, 112 190, 106 186 M120 176 C 120 186, 128 190, 134 186" fill="none" stroke="#7A5F35" stroke-width="2.5" stroke-linecap="round"/>
+                <g stroke="#96753F" stroke-width="2" stroke-linecap="round">
+                  <line x1="46" y1="152" x2="86" y2="158"/>
+                  <line x1="46" y1="168" x2="86" y2="166"/>
+                  <line x1="194" y1="152" x2="154" y2="158"/>
+                  <line x1="194" y1="168" x2="154" y2="166"/>
+                </g>
+                <path d="M120 225 C 60 235, 30 280, 45 300" fill="none" stroke="#A8814B" stroke-width="26" stroke-linecap="round"/>
+                <path d="M60 280 C 78 272, 92 282, 90 296" fill="none" stroke="#E9D3A8" stroke-width="14" stroke-linecap="round"/>
+              </g>
+              <text x="60" y="344" fill="#96753F" font-family="Georgia,serif" font-size="20" font-style="italic">Kitty Time ♡</text>
+            </svg>
+            <span class="video-tag">▶ Video</span>
+            <span class="video-meta">点击播放</span>
+            <span class="play-btn" aria-hidden="true"></span>
+          </div>
+        </button>
+      </div>
+      <div>
+        <span class="no">Hobby 06 · Life</span>
+        <h2 class="serif">猫</h2>
+        <p>世界上最治愈的小生物。看它们打个哈欠、追个毛线球，一天的疲惫就没了——吸猫十分钟，快乐一整天。</p>
+        <div class="tags"><span class="tag gold">吸猫日常</span><span class="tag">云养猫</span><span class="tag">治愈担当</span></div>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<footer>
+  <p>李红芳 · 爱好 <span style="color:var(--accent)">◆</span> 2026</p>
+  <a class="back-home" href="index.html">← 返回首页</a>
+</footer>
+
+<div class="vmodal" id="vmodal" role="dialog" aria-modal="true" aria-label="视频播放">
+  <div class="vmodal-inner">
+    <button class="vmodal-close" id="vclose" aria-label="关闭">×</button>
+    <video id="vplayer" controls playsinline></video>
+  </div>
+</div>
+<script>
+  const modal=document.getElementById('vmodal');
+  const player=document.getElementById('vplayer');
+  const closeBtn=document.getElementById('vclose');
+  function open(src){
+    player.src=src;
+    modal.classList.add('open');
+    document.body.classList.add('no-scroll');
+    player.play().catch(()=>{});
+  }
+  function close(){
+    modal.classList.remove('open');
+    document.body.classList.remove('no-scroll');
+    player.pause();player.removeAttribute('src');player.load();
+  }
+  document.querySelectorAll('.video-card').forEach(btn=>{
+    btn.addEventListener('click',()=>open(btn.dataset.video));
+  });
+  modal.addEventListener('click',e=>{if(e.target===modal)close();});
+  closeBtn.addEventListener('click',close);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))close();});
+</script>
+
+</body>
+</html>
